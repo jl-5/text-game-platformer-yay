@@ -1,0 +1,10 @@
+[package]
+name = "text-game"
+version = "0.1.0"
+authors = ["Justin Long and John Hamre <jclb2020@mymail.pomona.edu>"]
+edition = "2021"
+
+[dependencies]
+rand = "0.8.5"
+crossterm = "0.27.0"
+inputbot = "0.6.0"
