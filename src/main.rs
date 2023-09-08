@@ -1,16 +1,21 @@
 use std::time::Duration;
 use inputbot::{KeybdKey, MouseButton, KeySequence, KeybdKey::*};
 
-mod worldgen;
+mod worldgen; 
+mod physicsloop; 
+mod renderloop;
 
+const worldsize: (usize,usize) = (500,30);
+
+// 80x24 terminal size
 fn main() {
     /*
         Main Variables
      */
         // Holds the Raw terrain. Update on block break, for example.
-        let mut terrain = [[{' '}; 500];30];
+        let mut terrain = [[{' '}; worldsize.0];worldsize.1];
         // Holds the world this frame. Recalculated each frame.
-        let mut world = [[{' '}; 500];30];
+        let mut world = [[{' '}; worldsize.0];worldsize.1];
 
         // Camera pos
         let mut camera_pos: (usize,usize) = (50,15); 
@@ -23,9 +28,7 @@ fn main() {
     /*
         WorldGen
      */ 
-    gen_world(world);
-
-    worldgen::printhi();
+    worldgen::gen_world(&mut world);
     
     // Main loop
     let mut exit_bool: bool = false;
@@ -33,10 +36,13 @@ fn main() {
         
         // Read Key Inputs
         i = read_key_inputs(i);
+// Timer belongs here for loop.
+
         // Simulate the world
-        simulate();
+        physicsloop::simulate();
         // Draw the world
-        draw(world, camera_pos);
+        renderloop::draw(world, camera_pos);
+// End timer
 
         // End program
     }
@@ -49,17 +55,4 @@ fn read_key_inputs(mut i: i32) -> i32{
         println!("Left Frames: {}", i);
     }
     return i;
-}
-
-fn gen_world(world: [[char;500];30]) {
-
-}
-
-// Main loop for simulating a frame of the world update
-fn simulate() {
-
-}
-
-fn draw(world: [[char;500];30], camera_pos: (usize,usize)) {
-
 }
