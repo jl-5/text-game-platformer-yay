@@ -6,9 +6,9 @@ mod worldgen;
 mod physicsloop; 
 mod renderloop;
 
-const worldsize: (usize,usize) = (500,30);
+pub const WORLDSIZE: (usize,usize) = (30,10);
 // Duration of 1 frame
-const FRAME_TIME: f64 = 2.0;
+const FRAME_TIME: f64 = 1.0;
 
 // 80x24 terminal size
 fn main() {
@@ -16,9 +16,9 @@ fn main() {
         Main Variables
      */
         // Holds the Raw terrain. Update on block break, for example.
-        let mut terrain = [[{' '}; worldsize.0];worldsize.1];
+        let mut terrain: [[char; WORLDSIZE.0]; WORLDSIZE.1] = [[{' '}; WORLDSIZE.0];WORLDSIZE.1];
         // Holds the world this frame. Recalculated each frame.
-        let mut world = [[{' '}; worldsize.0];worldsize.1];
+        let mut world: [[char; WORLDSIZE.0]; WORLDSIZE.1] = [[{'#'}; WORLDSIZE.0];WORLDSIZE.1];
 
         // Camera pos
         let mut camera_pos: (usize,usize) = (50,15); 

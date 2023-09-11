@@ -1,5 +1,5 @@
 [package]
-name = "text-game"
+name = "main"
 version = "0.1.0"
 authors = ["Justin Long and John Hamre <jclb2020@mymail.pomona.edu>"]
 edition = "2021"
