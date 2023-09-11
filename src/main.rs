@@ -1,4 +1,5 @@
 use std::time::Duration;
+use std::time::Instant;
 use inputbot::{KeybdKey, MouseButton, KeySequence, KeybdKey::*};
 
 mod worldgen; 
@@ -6,6 +7,8 @@ mod physicsloop;
 mod renderloop;
 
 const worldsize: (usize,usize) = (500,30);
+// Duration of 1 frame
+const FRAME_TIME: f64 = 2.0;
 
 // 80x24 terminal size
 fn main() {
@@ -38,10 +41,15 @@ fn main() {
         i = read_key_inputs(i);
 // Timer belongs here for loop.
 
-        // Simulate the world
-        physicsloop::simulate();
-        // Draw the world
-        renderloop::draw(world, camera_pos);
+        // Run these once every FRAME_TIME (seconds)
+        if last_frame.elapsed().as_secs_f64() >= FRAME_TIME {
+            last_frame = Instant::now();
+            // Simulate the world
+            physicsloop::simulate();
+            // Draw the world
+            renderloop::draw(world, camera_pos);
+        }
+
 // End timer
 
         // End program
