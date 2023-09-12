@@ -39,7 +39,6 @@ fn main() {
         
         // Read Key Inputs
         i = read_key_inputs(i);
-// Timer belongs here for loop.
 
         // Run these once every FRAME_TIME (seconds)
         if last_frame.elapsed().as_secs_f64() >= FRAME_TIME {
