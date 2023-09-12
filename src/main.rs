@@ -8,7 +8,7 @@ mod renderloop;
 
 pub const WORLDSIZE: (usize,usize) = (30,10);
 // Duration of 1 frame
-const FRAME_TIME: f64 = 1.0;
+const FRAME_TIME: f64 = 0.05;
 
 // 80x24 terminal size
 fn main() {
