@@ -15,7 +15,7 @@ pub fn draw(world: [[char; WORLDSIZE.0]; WORLDSIZE.1], camera_pos: (usize,usize)
         let current_row = world[row];
         let row_string: String = current_row.iter().collect();
         // print the row to the terminal
-        print!("\n{}", row_string);
+        print!("{}", row_string);
     }
 
     // println!("FINISHED DRAWING WORLD!");

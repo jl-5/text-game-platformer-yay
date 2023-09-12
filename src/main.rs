@@ -5,9 +5,23 @@ mod worldgen;
 mod physicsloop; 
 mod renderloop;
 
-pub const WORLDSIZE: (usize,usize) = (30,10);
+pub const WORLDSIZE: (usize,usize) = (500,30);
 // Duration of 1 frame
-const FRAME_TIME: f64 = 0.1;
+const FRAME_TIME: f64 = 0.015;
+
+// The Player Struct
+pub struct Player {
+    pos: (usize, usize),
+    // Add more stuff here as makes sense
+    // i.e. sprites, animationState, etc.
+}
+
+impl Player {
+    fn set_pos(&mut self, x: usize, y: usize) {
+        // ^^^ Here
+        self.pos = (x, y);
+    }
+}
 
 // 80x24 terminal size
 fn main() {
@@ -35,10 +49,16 @@ fn main() {
         5: Z
          */
         let mut keys_pressed: [bool; 6] = [false; 6];
+
+        // Player Instantiation
+        let player = Player {
+            pos: (10, 1)
+        };
     /*
         WorldGen
      */ 
         worldgen::gen_world(&mut world);
+
     
     // Main loop
     let mut exit_bool: bool = false;
@@ -51,7 +71,7 @@ fn main() {
         if last_frame.elapsed().as_secs_f64() >= FRAME_TIME {
             last_frame = Instant::now();
             // Simulate the world
-            physicsloop::simulate(&mut world, &mut gamestate, keys_pressed);
+            physicsloop::simulate(&mut world, &mut gamestate, keys_pressed, &player);
             // Draw the world (from gamestate)
             renderloop::draw(gamestate, camera_pos);
         }
