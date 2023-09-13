@@ -1,5 +1,4 @@
 use super::WORLDSIZE;
-use rand::Rng;
 
 // The code used to generate the map.
 pub fn gen_world(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1]) {
