@@ -2,11 +2,14 @@
 use super::WORLDSIZE;
 use super::Player;
 
+pub const JUMP_STRENGTH: i32 = 5;
+
 // simulate is called every frame before the frame is drawn.
 // simulate is currently called 20 times per second, but this can be changed with the const in main.rs
 pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], keys_pressed: &mut [bool; 6], player: &mut Player) 
 {
     if keys_pressed[5] {
+        println!("jumping!");
         jump(player,game_state);
         keys_pressed[5] = false;
     }
@@ -20,6 +23,7 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
     }
 
     player.increment_frame_counter();
+    player.increment_grav_counter();
     
     // Begin by syncing the world map to the game state. Anything drawn from this point should
     // only override ' ' characters.
@@ -30,7 +34,11 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
     }
 
     // This has to go before any player rendering. Does vertical collision and movement via ancient dark magic.
-    do_gravity(player, game_state);
+    if player.grav_counter >= GRAV_EVERY_BLANK_FRAMES {
+        do_gravity(player, game_state);
+        player.reset_grav_counter();
+    }
+    
     do_walk(player, game_state);
 
     // if player is walking left or right
@@ -84,9 +92,10 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
 }
 
 const GRAV_PER_FRAME: i32 = 1;
+const GRAV_EVERY_BLANK_FRAMES: usize = 2;
 
 fn do_gravity(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1]) {
-    // Apply gravity
+        // Apply gravity
     player.set_accel(player.accel.0, player.accel.1 + GRAV_PER_FRAME);
 
     // Ground collision
@@ -130,7 +139,9 @@ fn do_gravity(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZ
         }
         player.set_pos(player.pos.0, snapto as usize);
     }
+    
 }
+
 
 fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1]) {
     // Collision Code here.
@@ -164,7 +175,7 @@ fn jump(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1]) 
     }
     // If On Ground, Jump.
     if on_ground {
-        player.set_accel(0, -4);
+        player.set_accel(0, -JUMP_STRENGTH);
     }
     // Returns true if the player successfully jumped
     return on_ground;

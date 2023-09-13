@@ -5,9 +5,10 @@ mod worldgen;
 mod physicsloop; 
 mod renderloop;
 
-pub const WORLDSIZE: (usize,usize) = (500,30);
+// this should be in the formmat x,y
+pub const WORLDSIZE: (usize,usize) = (573,30);
 // Duration of 1 frame
-const FRAME_TIME: f64 = 0.1;
+const FRAME_TIME: f64 = 0.05;
 const ANIM_RATE: usize = 5;
 
 // The Player Struct
@@ -21,6 +22,8 @@ pub struct Player {
     is_walking: bool,
     // this has no business being here lol
     frame_counter: usize,
+    // this is so mf janky
+    grav_counter: usize,
     accel: (i32, i32),
 }
 
@@ -49,6 +52,14 @@ impl Player {
 
     fn increment_frame_counter(&mut self){
         self.frame_counter += 1;
+    }
+
+    fn increment_grav_counter(&mut self){
+        self.grav_counter += 1;
+    }
+
+    fn reset_grav_counter(&mut self){
+        self.grav_counter = 0;
     }
 
     fn set_accel(&mut self, x: i32, y: i32) {
@@ -83,11 +94,12 @@ fn main() {
 
         // Player Instantiation
         let mut player = Player {
-            pos: (10, 28),
+            pos: (10, 24),
             animation: 0,
             is_walking: false,
             frame_counter: 0,
             accel: (0, 0),
+            grav_counter: 0,
         };
     /*
         WorldGen
