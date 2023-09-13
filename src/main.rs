@@ -17,10 +17,10 @@ pub struct Player {
     // i.e. sprites, animationState, etc.
 
     // this is a 0 if in initial animation state and a 1 if in the walking state
-    animation: (usize),
-    is_walking: (bool),
+    animation: usize,
+    is_walking: bool,
     // this has no business being here lol
-    frame_counter: (usize),
+    frame_counter: usize,
     accel: (i32, i32),
 }
 
@@ -66,9 +66,6 @@ fn main() {
         let mut gamestate: [[char; WORLDSIZE.0]; WORLDSIZE.1] = [[{' '}; WORLDSIZE.0];WORLDSIZE.1];
         // Holds the world, excluding the player and entities
         let mut world: [[char; WORLDSIZE.0]; WORLDSIZE.1] = [[{' '}; WORLDSIZE.0];WORLDSIZE.1];
-
-        // Camera pos
-        let mut camera_pos: (usize,usize) = (50,28); 
     
         // Holds the millis time of the last frame.
         let mut last_frame = std::time::Instant::now();
@@ -111,7 +108,7 @@ fn main() {
             // Simulate the world
             physicsloop::simulate(&mut world, &mut gamestate, keys_pressed, &mut player);
             // Sync Camera Pos to Player for now.
-            camera_pos = player.pos;
+            let camera_pos = player.pos;
             // Draw the world (from gamestate)
             renderloop::draw(gamestate, camera_pos);
         }

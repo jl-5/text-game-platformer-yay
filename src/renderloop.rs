@@ -32,5 +32,5 @@ pub fn draw(world: [[char; WORLDSIZE.0]; WORLDSIZE.1], camera_pos: (usize,usize)
         mutable_string.push_str("\n");
     }
 
-     print!("{}", mutable_string);
+    //print!("{}", mutable_string);
 }
