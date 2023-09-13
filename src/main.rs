@@ -79,6 +79,8 @@ fn main() {
             last_frame = Instant::now();
             // Simulate the world
             physicsloop::simulate(&mut world, &mut gamestate, keys_pressed, &player);
+            // Sync Camera Pos to Player for now.
+            camera_pos = player.pos;
             // Draw the world (from gamestate)
             renderloop::draw(gamestate, camera_pos);
         }
