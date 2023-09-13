@@ -7,7 +7,7 @@ mod renderloop;
 
 pub const WORLDSIZE: (usize,usize) = (500,30);
 // Duration of 1 frame
-const FRAME_TIME: f64 = 0.015;
+const FRAME_TIME: f64 = 0.1;
 
 // The Player Struct
 pub struct Player {
@@ -29,12 +29,13 @@ fn main() {
         Main Variables
      */
         // Holds the final charmap to be drawn, including player and entities
+        // WORLD TOP IS 0, WORLD BOTTOM IS WORLDSIZE.1.
         let mut gamestate: [[char; WORLDSIZE.0]; WORLDSIZE.1] = [[{' '}; WORLDSIZE.0];WORLDSIZE.1];
         // Holds the world, excluding the player and entities
         let mut world: [[char; WORLDSIZE.0]; WORLDSIZE.1] = [[{' '}; WORLDSIZE.0];WORLDSIZE.1];
 
         // Camera pos
-        let mut camera_pos: (usize,usize) = (50,15); 
+        let mut camera_pos: (usize,usize) = (50,28); 
     
         // Holds the millis time of the last frame.
         let mut last_frame = std::time::Instant::now();
@@ -52,7 +53,7 @@ fn main() {
 
         // Player Instantiation
         let player = Player {
-            pos: (10, 1)
+            pos: (10, 28)
         };
     /*
         WorldGen
