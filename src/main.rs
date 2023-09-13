@@ -7,13 +7,17 @@ mod renderloop;
 
 pub const WORLDSIZE: (usize,usize) = (500,30);
 // Duration of 1 frame
-const FRAME_TIME: f64 = 0.1;
+const FRAME_TIME: f64 = 1.0;
 
 // The Player Struct
 pub struct Player {
     pos: (usize, usize),
     // Add more stuff here as makes sense
     // i.e. sprites, animationState, etc.
+
+    // this is a 0 if in initial animation state and a 1 if in the walking state
+    animation: (usize),
+    is_walking: (bool),
 }
 
 impl Player {
@@ -53,7 +57,9 @@ fn main() {
 
         // Player Instantiation
         let player = Player {
-            pos: (10, 28)
+            pos: (10, 28),
+            animation: 0,
+            is_walking: false,
         };
     /*
         WorldGen
