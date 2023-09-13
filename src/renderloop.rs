@@ -15,16 +15,15 @@ pub fn draw(world: [[char; WORLDSIZE.0]; WORLDSIZE.1], camera_pos: (usize,usize)
     // Camera Axis bound protection.
     let range_bottom: usize = if ((camera_pos.1) as i32 - (CAMERA_RANGE.0 as i32)) < 0 { 0 } else { camera_pos.1 - CAMERA_RANGE.0 };
     let range_top: usize = if ((camera_pos.1) as i32 + (CAMERA_RANGE.1 as i32)) > (WORLDSIZE.1) as i32 { WORLDSIZE.1 } else { camera_pos.1 + CAMERA_RANGE.1 };
-    let range_left: usize = 0;
-    let range_right: usize = 50;
+    let range_left: usize = if ((camera_pos.0) as i32 - (CAMERA_RANGE.2 as i32)) < 0 { 0 } else { camera_pos.0 - CAMERA_RANGE.2 };
+    let range_right: usize = if ((camera_pos.0) as i32 + (CAMERA_RANGE.3 as i32)) > (WORLDSIZE.0) as i32 { WORLDSIZE.0 } else { camera_pos.0 + CAMERA_RANGE.3 };;
     // Draw the world on this range.
     // Start by iterating through rows.
     for row in range_bottom..range_top {
         let current_row = world[row];
-        let row_string: String = current_row.iter().collect();
         // Then get board L/R range substrings.
-        let (left, mid_right) = current_row.split_at(range_left);
-        let (row, right) = mid_right.split_at(range_right - range_left);
+        let (_, mid_right) = current_row.split_at(range_left);
+        let (row, _) = mid_right.split_at(range_right - range_left);
 
         // print the row to the terminal
         for c in row {
