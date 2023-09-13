@@ -106,7 +106,7 @@ fn main() {
         if last_frame.elapsed().as_secs_f64() >= FRAME_TIME {
             last_frame = Instant::now();
             // Simulate the world
-            physicsloop::simulate(&mut world, &mut gamestate, keys_pressed, &mut player);
+            physicsloop::simulate(&mut world, &mut gamestate, &mut keys_pressed, &mut player);
             // Sync Camera Pos to Player for now.
             let camera_pos = player.pos;
             // Draw the world (from gamestate)

@@ -16,7 +16,7 @@ pub fn draw(world: [[char; WORLDSIZE.0]; WORLDSIZE.1], camera_pos: (usize,usize)
     let range_bottom: usize = if ((camera_pos.1) as i32 - (CAMERA_RANGE.0 as i32)) < 0 { 0 } else { camera_pos.1 - CAMERA_RANGE.0 };
     let range_top: usize = if ((camera_pos.1) as i32 + (CAMERA_RANGE.1 as i32)) > (WORLDSIZE.1) as i32 { WORLDSIZE.1 } else { camera_pos.1 + CAMERA_RANGE.1 };
     let range_left: usize = if ((camera_pos.0) as i32 - (CAMERA_RANGE.2 as i32)) < 0 { 0 } else { camera_pos.0 - CAMERA_RANGE.2 };
-    let range_right: usize = if ((camera_pos.0) as i32 + (CAMERA_RANGE.3 as i32)) > (WORLDSIZE.0) as i32 { WORLDSIZE.0 } else { camera_pos.0 + CAMERA_RANGE.3 };;
+    let range_right: usize = if ((camera_pos.0) as i32 + (CAMERA_RANGE.3 as i32)) > (WORLDSIZE.0) as i32 { WORLDSIZE.0 } else { camera_pos.0 + CAMERA_RANGE.3 };
     // Draw the world on this range.
     // Start by iterating through rows.
     for row in range_bottom..range_top {
