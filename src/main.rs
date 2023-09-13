@@ -43,8 +43,8 @@ impl Player {
             else if self.animation == 1 {
                 self.animation = 0;
             }
+            self.frame_counter = 0;
         }
-        self.frame_counter = 0;
     }
 
     fn increment_frame_counter(&mut self){

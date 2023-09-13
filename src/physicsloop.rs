@@ -11,7 +11,7 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
     }
 
     player.increment_frame_counter();
-
+    
     // Begin by syncing the world map to the game state. Anything drawn from this point should
     // only override ' ' characters.
     for i in 0..WORLDSIZE.1 {
