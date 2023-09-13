@@ -5,7 +5,7 @@ use super::WORLDSIZE;
 
 // how far around camera center the camera can view. Shouldn't probably change for this game.
 // Bottom, Top, Left, Right
-const CAMERA_RANGE: (usize,usize,usize,usize) = (15,14,40,40);
+const CAMERA_RANGE: (usize,usize,usize,usize) = (15,14,20,60);
 
 // the world dimensions are 500x30
 pub fn draw(world: [[char; WORLDSIZE.0]; WORLDSIZE.1], camera_pos: (usize,usize)) {
