@@ -13,6 +13,44 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
             game_state[i][j] = world[i][j];
         }
     }
+
+    // need to insert player at its position. Player position is middle bottom
+    // if we're in initial animation state
+    if player.animation == 0 {
+        println!("animation is zero");
+        //   o
+        //  /|\
+        //  / \
+        game_state[player.pos.1][player.pos.0] = ' ';
+        game_state[player.pos.1][player.pos.0 - 1] = '/';
+        game_state[player.pos.1][player.pos.0 + 1] = '\\';
+        game_state[player.pos.1 - 1][player.pos.0] = '|';
+        game_state[player.pos.1 - 1][player.pos.0 - 1] = '/';
+        game_state[player.pos.1 - 1][player.pos.0 + 1] = '\\';
+        game_state[player.pos.1 - 2][player.pos.0] = 'o';
+        game_state[player.pos.1 - 2][player.pos.0 - 1] = ' ';
+        game_state[player.pos.1 - 2][player.pos.0 + 1] = ' ';
+    }
+    // if we're in the walking animation state
+    else if player.animation == 1 {
+        println!("animation is one");
+        //   o
+        //  /|\
+        //   |
+        game_state[player.pos.1][player.pos.0] = '|';
+        game_state[player.pos.1][player.pos.0 - 1] = ' ';
+        game_state[player.pos.1][player.pos.0 + 1] = ' ';
+        game_state[player.pos.1 - 1][player.pos.0] = '|';
+        game_state[player.pos.1 - 1][player.pos.0 - 1] = '/';
+        game_state[player.pos.1 - 1][player.pos.0 + 1] = '\\';
+        game_state[player.pos.1 - 2][player.pos.0] = 'o';
+        game_state[player.pos.1 - 2][player.pos.0 - 1] = ' ';
+        game_state[player.pos.1 - 2][player.pos.0 + 1] = ' ';
+    }
+    else {
+        println!("Error setting animation state!");
+    }
+    
     
     //println!("Tick!")
 }
