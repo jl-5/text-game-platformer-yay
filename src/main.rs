@@ -8,6 +8,7 @@ mod renderloop;
 pub const WORLDSIZE: (usize,usize) = (500,30);
 // Duration of 1 frame
 const FRAME_TIME: f64 = 0.1;
+const ANIM_RATE: usize = 5;
 
 // The Player Struct
 pub struct Player {
@@ -18,12 +19,40 @@ pub struct Player {
     // this is a 0 if in initial animation state and a 1 if in the walking state
     animation: (usize),
     is_walking: (bool),
+    // this has no business being here lol
+    frame_counter: (usize),
+    accel: (i32, i32),
 }
 
 impl Player {
     fn set_pos(&mut self, x: usize, y: usize) {
         // ^^^ Here
         self.pos = (x, y);
+    }
+
+    fn set_is_walking(&mut self, walk_bool: bool) {
+        self.is_walking = walk_bool;
+    }
+
+    // this function should toggle the animation state if enough frames have passed
+    fn animate(&mut self) {
+        if self.frame_counter >= ANIM_RATE {
+            if self.animation == 0 {
+                self.animation = 1;
+            }
+            else if self.animation == 1 {
+                self.animation = 0;
+            }
+        }
+        self.frame_counter = 0;
+    }
+
+    fn increment_frame_counter(&mut self){
+        self.frame_counter += 1;
+    }
+
+    fn set_accel(&mut self, x: i32, y: i32) {
+        self.accel = (x, y);
     }
 }
 
@@ -56,10 +85,12 @@ fn main() {
         let mut keys_pressed: [bool; 6] = [false; 6];
 
         // Player Instantiation
-        let player = Player {
+        let mut player = Player {
             pos: (10, 28),
             animation: 0,
             is_walking: false,
+            frame_counter: 0,
+            accel: (0, 0),
         };
     /*
         WorldGen
@@ -78,7 +109,7 @@ fn main() {
         if last_frame.elapsed().as_secs_f64() >= FRAME_TIME {
             last_frame = Instant::now();
             // Simulate the world
-            physicsloop::simulate(&mut world, &mut gamestate, keys_pressed, &player);
+            physicsloop::simulate(&mut world, &mut gamestate, keys_pressed, &mut player);
             // Sync Camera Pos to Player for now.
             camera_pos = player.pos;
             // Draw the world (from gamestate)

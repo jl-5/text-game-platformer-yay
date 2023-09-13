@@ -4,14 +4,25 @@ use super::Player;
 
 // simulate is called every frame before the frame is drawn.
 // simulate is currently called 20 times per second, but this can be changed with the const in main.rs
-pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], keys_pressed: [bool; 6], player: &Player) 
+pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], keys_pressed: [bool; 6], player: &mut Player) 
 {
+    player.increment_frame_counter();
+
     // Begin by syncing the world map to the game state. Anything drawn from this point should
     // only override ' ' characters.
     for i in 0..WORLDSIZE.1 {
         for j in 1..WORLDSIZE.0 {
             game_state[i][j] = world[i][j];
         }
+    }
+
+    // if player is walking left or right
+    if keys_pressed[0] || keys_pressed[1] {
+        player.set_is_walking(true);
+        player.animate();
+    }
+    else {
+        player.set_is_walking(false);
     }
 
     // need to insert player at its position. Player position is middle bottom
