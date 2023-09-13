@@ -7,7 +7,7 @@ mod renderloop;
 
 pub const WORLDSIZE: (usize,usize) = (500,30);
 // Duration of 1 frame
-const FRAME_TIME: f64 = 1.0;
+const FRAME_TIME: f64 = 0.1;
 
 // The Player Struct
 pub struct Player {
