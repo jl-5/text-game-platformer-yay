@@ -238,3 +238,8 @@ fn read_key_inputs(mut keys: [bool; 6]) -> [bool; 6]{
     }
     return keys;
 }
+
+fn reset_map(player: &mut Player) {
+    player.set_pos(10, 24);
+    player.set_accel(0, 0);
+}
