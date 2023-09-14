@@ -155,6 +155,23 @@ fn main() {
             grav_counter: 0,
             has_won: false,
         };
+
+        // Enemy instatiations
+        let mut enemy1: Enemy = Enemy {
+            pos: (263, 22),
+            animation: 0,
+            frame_counter: 0,
+            accel: (0, 0)
+        };
+
+        let mut enemy2: Enemy = Enemy {
+            pos: (303, 10),
+            animation: 0,
+            frame_counter: 0,
+            accel: (0, 0),
+        };
+
+        let mut enemies: [Enemy; 2] = [enemy1, enemy2];
     /*
         WorldGen
      */ 
@@ -172,7 +189,7 @@ fn main() {
         if last_frame.elapsed().as_secs_f64() >= FRAME_TIME {
             last_frame = Instant::now();
             // Simulate the world
-            physicsloop::simulate(&mut world, &mut gamestate, &mut keys_pressed, &mut player);
+            physicsloop::simulate(&mut world, &mut gamestate, &mut keys_pressed, &mut player, &mut enemies);
             // Sync Camera Pos to Player for now.
             let camera_pos = player.pos;
             // Draw the world (from gamestate)

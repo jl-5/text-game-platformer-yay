@@ -1,6 +1,7 @@
 // All code for the physics loop should go in here.
 use super::WORLDSIZE;
 use super::Player;
+use super::Enemy;
 
 pub const JUMP_STRENGTH: i32 = 4;
 const GRAV_EVERY_BLANK_FRAMES: usize = 3;
@@ -8,13 +9,13 @@ pub const WIN_LOCATION: (usize, usize) = (536,20);
 
 // simulate is called every frame before the frame is drawn.
 // simulate is currently called 20 times per second, but this can be changed with the const in main.rs
-pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], keys_pressed: &mut [bool; 6], player: &mut Player) 
+pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], keys_pressed: &mut [bool; 6], player: &mut Player, enemies: &mut [Enemy; 2]) 
 {
 
-    if keys_pressed[5] {
+    if keys_pressed[2] {
         println!("jumping!");
         jump(player,game_state);
-        keys_pressed[5] = false;
+        keys_pressed[2] = false;
     }
 
     // Set walk accel
@@ -114,7 +115,42 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
         game_state[player.pos.1 - 2][player.pos.0 + 1] = ' ';
     }
     else {
-        println!("Error setting animation state!");
+        println!("Error setting player animation state!");
+    }
+
+
+    // enemy animation time!
+
+    for i in 0..=enemies.len() - 1 {
+        let this_enemy = &enemies[i];
+            if this_enemy.animation == 0 {
+                //  v
+                // >#<
+                // / \
+                game_state[this_enemy.pos.1][this_enemy.pos.0] = ' ';
+                game_state[this_enemy.pos.1][this_enemy.pos.0 - 1] = '/';
+                game_state[this_enemy.pos.1][this_enemy.pos.0 + 1] = '\\';
+                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0] = '#';
+                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0 - 1] = '>';
+                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0 + 1] = '<';
+                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0] = 'v';
+                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0 - 1] = ' ';
+                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0 + 1] = ' ';
+            }
+            else if this_enemy.animation == 1 {
+                //  v
+                // >#<
+                //  |
+                game_state[this_enemy.pos.1][this_enemy.pos.0] = '|';
+                game_state[this_enemy.pos.1][this_enemy.pos.0 - 1] = ' ';
+                game_state[this_enemy.pos.1][this_enemy.pos.0 + 1] = ' ';
+                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0] = '#';
+                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0 - 1] = '>';
+                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0 + 1] = '<';
+                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0] = 'v';
+                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0 - 1] = ' ';
+                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0 + 1] = ' ';
+            }
     }
     
     // Reset at end 
@@ -122,9 +158,13 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
     keys_pressed[1] = false;
     //println!("Tick!")
 
+    // if the player is in the win location (where the head is in the "o" spot)
+    if player.pos.0 >= WIN_LOCATION.0 && player.pos.1 <= WIN_LOCATION.1 + 2{
+        player.win();
+    }
+
     if player.has_won {
         game_state[WIN_LOCATION.1][WIN_LOCATION.0] = 'o';
-        println!("player won!");
     }
 }
 
@@ -186,14 +226,7 @@ fn do_gravity(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZ
 
 fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1]) {
     // Collision Code here.
-    player.set_pos((player.pos.0 as i32 + player.accel.0) as usize, player.pos.1);
-    
-    // if the player is in the win location (where the head is in the "o" spot)
-    if player.pos.0 > WIN_LOCATION.0 && player.pos.1 == WIN_LOCATION.1 + 2{
-        player.win();
-    }
-    
-    
+    player.set_pos((player.pos.0 as i32 + player.accel.0) as usize, player.pos.1);   
     
     // Right
     if player.accel.0 > 0 {
