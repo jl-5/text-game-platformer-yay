@@ -113,8 +113,7 @@ fn main() {
 
         // Player Instantiation
         let mut player = Player {
-            // change the x back to 10 to reset player
-            pos: (510, 24),
+            pos: (10, 24),
             animation: 0,
             is_walking: false,
             frame_counter: 0,
