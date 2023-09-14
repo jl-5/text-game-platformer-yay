@@ -122,34 +122,35 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
     // enemy animation time!
 
     for i in 0..=enemies.len() - 1 {
-        let this_enemy = &enemies[i];
-            if this_enemy.animation == 0 {
+        enemies[i].increment_frame_counter();
+        enemies[i].animate();
+            if enemies[i].animation == 0 {
                 //  v
-                // >#<
+                // >#< 
                 // / \
-                game_state[this_enemy.pos.1][this_enemy.pos.0] = ' ';
-                game_state[this_enemy.pos.1][this_enemy.pos.0 - 1] = '/';
-                game_state[this_enemy.pos.1][this_enemy.pos.0 + 1] = '\\';
-                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0] = '#';
-                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0 - 1] = '>';
-                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0 + 1] = '<';
-                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0] = 'v';
-                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0 - 1] = ' ';
-                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0 + 1] = ' ';
+                game_state[enemies[i].pos.1][enemies[i].pos.0] = ' ';
+                game_state[enemies[i].pos.1][enemies[i].pos.0 - 1] = '/';
+                game_state[enemies[i].pos.1][enemies[i].pos.0 + 1] = '\\';
+                game_state[enemies[i].pos.1 - 1][enemies[i].pos.0] = '#';
+                game_state[enemies[i].pos.1 - 1][enemies[i].pos.0 - 1] = '>';
+                game_state[enemies[i].pos.1 - 1][enemies[i].pos.0 + 1] = '<';
+                game_state[enemies[i].pos.1 - 2][enemies[i].pos.0] = 'v';
+                game_state[enemies[i].pos.1 - 2][enemies[i].pos.0 - 1] = ' ';
+                game_state[enemies[i].pos.1 - 2][enemies[i].pos.0 + 1] = ' ';
             }
-            else if this_enemy.animation == 1 {
+            else if enemies[i].animation == 1 {
                 //  v
                 // >#<
                 //  |
-                game_state[this_enemy.pos.1][this_enemy.pos.0] = '|';
-                game_state[this_enemy.pos.1][this_enemy.pos.0 - 1] = ' ';
-                game_state[this_enemy.pos.1][this_enemy.pos.0 + 1] = ' ';
-                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0] = '#';
-                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0 - 1] = '>';
-                game_state[this_enemy.pos.1 - 1][this_enemy.pos.0 + 1] = '<';
-                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0] = 'v';
-                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0 - 1] = ' ';
-                game_state[this_enemy.pos.1 - 2][this_enemy.pos.0 + 1] = ' ';
+                game_state[enemies[i].pos.1][enemies[i].pos.0] = '|';
+                game_state[enemies[i].pos.1][enemies[i].pos.0 - 1] = ' ';
+                game_state[enemies[i].pos.1][enemies[i].pos.0 + 1] = ' ';
+                game_state[enemies[i].pos.1 - 1][enemies[i].pos.0] = '#';
+                game_state[enemies[i].pos.1 - 1][enemies[i].pos.0 - 1] = '>';
+                game_state[enemies[i].pos.1 - 1][enemies[i].pos.0 + 1] = '<';
+                game_state[enemies[i].pos.1 - 2][enemies[i].pos.0] = 'v';
+                game_state[enemies[i].pos.1 - 2][enemies[i].pos.0 - 1] = ' ';
+                game_state[enemies[i].pos.1 - 2][enemies[i].pos.0 + 1] = ' ';
             }
     }
     
@@ -159,7 +160,7 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
     //println!("Tick!")
 
     // if the player is in the win location (where the head is in the "o" spot)
-    if player.pos.0 >= WIN_LOCATION.0 && player.pos.1 <= WIN_LOCATION.1 + 2{
+    if player.pos.0 == WIN_LOCATION.0 && player.pos.1 <= WIN_LOCATION.1 + 2{
         player.win();
     }
 
