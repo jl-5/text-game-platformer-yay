@@ -230,6 +230,10 @@ fn do_gravity(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZ
                             player.set_accel(player.accel.0, 0);
                             break 'KILLPOINT;
                         }
+                        'M' => {
+                            kill(player);
+                            break 'KILLPOINT;
+                        }
                         _ => {
 
                         }
@@ -268,6 +272,7 @@ fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1
     if player.accel.0 != 0 {
         // Collision Code here.
         let mut collided = false;
+        let mut killed = false;
         let mut snapto = player.pos.0 as i32 + player.accel.0;
 
         // World End Collision
@@ -281,7 +286,7 @@ fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1
         }
 
         // Vertical first
-        for i in 0..=2 {
+        'KILLPOINT: for i in 0..=2 {
             // Then horizontal
             if player.accel.0 > 0 {
                 for j in 2..=player.accel.0 + 1 {
@@ -292,6 +297,12 @@ fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1
                             }
                             player.set_accel(0, player.accel.1);
                             collided = true;
+                        }
+                        'M' => {
+                            kill(player);
+                            collided = true;
+                            killed = true;
+                            break 'KILLPOINT;
                         }
                         _ => {}
                     }
@@ -307,12 +318,18 @@ fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1
                             player.set_accel(0, player.accel.1);
                             collided = true;
                         }
+                        'M' => {
+                            kill(player);
+                            collided = true;
+                            killed = true;
+                            break 'KILLPOINT;
+                        }
                         _ => {}
                     }
                 }
             }
         }
-        player.set_pos(snapto as usize, player.pos.1);
+        if !killed {player.set_pos(snapto as usize, player.pos.1);}
         
         // Slow the player down if they didn't collide this frame.
         if !collided{
