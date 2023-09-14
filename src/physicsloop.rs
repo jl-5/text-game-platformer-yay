@@ -140,13 +140,14 @@ fn do_gravity(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZ
     {
         let mut snapto: i32 = player.pos.1 as i32 + player.accel.1;
         // player's base
-        for i in 0..=2 {
-            for j in 1..=player.accel.1 {
+        'LOOP: for j in 1..=player.accel.1 {
+            for i in 0..=2 {
                 let targety = if player.pos.1 + j as usize > WORLDSIZE.1 - 1 {WORLDSIZE.1 - 1} else {player.pos.1 + j as usize};
                 match game_state[targety][i + player.pos.0 - 1] {
                     '#' | 'T' => {
                         snapto = targety as i32 - 1;
                         player.set_accel(player.accel.0, 0);
+                        break 'LOOP;
                     }
                     _ => {
 
