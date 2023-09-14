@@ -119,7 +119,7 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
     }
 
 
-    // enemy animation time!
+    // enemy animation  and movement time!
 
     for i in 0..=enemies.len() - 1 {
         enemies[i].increment_frame_counter();
@@ -152,7 +152,31 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
                 game_state[enemies[i].pos.1 - 2][enemies[i].pos.0 - 1] = ' ';
                 game_state[enemies[i].pos.1 - 2][enemies[i].pos.0 + 1] = ' ';
             }
-    }
+
+                // Check that the player is on the ground before letting them jump.
+                // if the enemy is facing left
+                if enemies[i].dir == 0 {
+                    // if there is no left space for it to walk on
+                    if game_state[enemies[i].pos.1 + 1][enemies[i].pos.0 - 1] == ' ' {
+                        enemies[i].flip_dir();
+                    }
+                    // otherwise, move it left
+                    else {
+                        enemies[i].set_pos(enemies[i].pos.0 - 1, enemies[i].pos.1);
+                    }
+                    
+                }
+                else if enemies[i].dir == 1 {
+                    // if there is no right space for it to walk on
+                    if game_state[enemies[i].pos.1 + 1][enemies[i].pos.0 + 1] == ' ' {
+                        enemies[i].flip_dir();
+                    }
+                    // otherwise, move it right
+                    else {
+                        enemies[i].set_pos(enemies[i].pos.0 + 1, enemies[i].pos.1);
+                    }
+                }                
+            }
     
     // Reset at end 
     keys_pressed[0] = false;

@@ -89,7 +89,8 @@ pub struct Enemy {
     pos: (usize, usize),
     animation: usize,
     frame_counter: usize,
-    accel: (i32, i32),
+    // 0 for left, 1 for right
+    dir: usize,
 }
 
 impl Enemy {
@@ -115,8 +116,16 @@ impl Enemy {
         self.frame_counter += 1;
     }
 
-    fn set_accel(&mut self, x: i32, y: i32) {
-        self.accel = (x, y);
+    fn flip_dir(&mut self) {
+        if self.dir == 0 {
+            self.dir = 1;
+        }
+        else if self.dir == 1 {
+            self.dir = 0;
+        }
+        else {
+            println!("you done messed up.");
+        }
     }
 }
 
@@ -161,14 +170,14 @@ fn main() {
             pos: (263, 22),
             animation: 0,
             frame_counter: 0,
-            accel: (0, 0)
+            dir: 0
         };
 
         let mut enemy2: Enemy = Enemy {
             pos: (303, 10),
             animation: 0,
             frame_counter: 0,
-            accel: (0, 0),
+            dir: 1
         };
 
         let mut enemies: [Enemy; 2] = [enemy1, enemy2];
