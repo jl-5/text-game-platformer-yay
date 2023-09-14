@@ -226,16 +226,56 @@ fn do_gravity(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZ
 
 
 fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1]) {
-    // Collision Code here.
-    player.set_pos((player.pos.0 as i32 + player.accel.0) as usize, player.pos.1);   
-    
-    // Right
-    if player.accel.0 > 0 {
-        player.set_accel(player.accel.0 - 1, player.accel.1);
-    }
-    // left
-    else if player.accel.0 < 0 {
-        player.set_accel(player.accel.0 + 1, player.accel.1);
+    if player.accel.0 != 0 {
+        // Collision Code here.
+        let mut collided = false;
+        let mut snapto = player.pos.0 as i32 + player.accel.0;
+
+        // Vertical first
+        for i in 0..=2 {
+            // Then horizontal
+            if player.accel.0 > 0 {
+                for j in 2..=player.accel.0 + 1 {
+                    match game_state[player.pos.1 - i][j as usize + player.pos.0] {
+                        '#' | 'T' => {
+                            if j + player.pos.0 as i32 - 2 < snapto {
+                                snapto = j + player.pos.0 as i32 - 2;
+                            }
+                            player.set_accel(0, player.accel.1);
+                            collided = true;
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            else {
+                for j in 2..=-(player.accel.0 - 1) {
+                    match game_state[player.pos.1 - i][player.pos.0 - j as usize ] {
+                        '#' | 'T' => {
+                            if -j + player.pos.0 as i32 + 2 > snapto {
+                                snapto = -j + player.pos.0 as i32 + 2;
+                            }
+                            player.set_accel(0, player.accel.1);
+                            collided = true;
+                        }
+                        _ => {}
+                    }
+                }
+            }
+        }
+        player.set_pos(snapto as usize, player.pos.1);
+        
+        // Slow the player down if they didn't collide this frame.
+        if !collided{
+            // Right
+            if player.accel.0 > 0 {
+                player.set_accel(player.accel.0 - 1, player.accel.1);
+            }
+            // left
+            else if player.accel.0 < 0 {
+                player.set_accel(player.accel.0 + 1, player.accel.1);
+            }
+        }
     }
 }
 
