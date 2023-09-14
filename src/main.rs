@@ -25,6 +25,7 @@ pub struct Player {
     // this is so mf janky
     grav_counter: usize,
     accel: (i32, i32),
+    has_won: bool,
 }
 
 impl Player {
@@ -39,15 +40,33 @@ impl Player {
 
     // this function should toggle the animation state if enough frames have passed
     fn animate(&mut self) {
-        if self.frame_counter >= ANIM_RATE {
-            if self.animation == 0 {
-                self.animation = 1;
+        // if the regular game is still going
+        if !self.has_won{
+            if self.frame_counter >= ANIM_RATE {
+                if self.animation == 0 {
+                    self.animation = 1;
+                }
+                else if self.animation == 1 {
+                    self.animation = 0;
+                }
+                self.frame_counter = 0;
             }
-            else if self.animation == 1 {
-                self.animation = 0;
+        }
+        else {
+            if self.animation == 2 {
+                self.animation = 3;
+            }
+            else if self.animation == 3 {
+                self.animation = 2;
             }
             self.frame_counter = 0;
         }
+
+    }
+
+    fn win(&mut self){
+        self.has_won = true;
+        self.animation = 2;
     }
 
     fn increment_frame_counter(&mut self){
@@ -94,12 +113,14 @@ fn main() {
 
         // Player Instantiation
         let mut player = Player {
-            pos: (10, 24),
+            // change the x back to 10 to reset player
+            pos: (510, 24),
             animation: 0,
             is_walking: false,
             frame_counter: 0,
             accel: (0, 0),
             grav_counter: 0,
+            has_won: false,
         };
     /*
         WorldGen

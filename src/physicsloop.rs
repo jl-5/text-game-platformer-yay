@@ -2,12 +2,15 @@
 use super::WORLDSIZE;
 use super::Player;
 
-pub const JUMP_STRENGTH: i32 = 5;
+pub const JUMP_STRENGTH: i32 = 4;
+const GRAV_EVERY_BLANK_FRAMES: usize = 3;
+pub const WIN_LOCATION: (usize, usize) = (536,20);
 
 // simulate is called every frame before the frame is drawn.
 // simulate is currently called 20 times per second, but this can be changed with the const in main.rs
 pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], keys_pressed: &mut [bool; 6], player: &mut Player) 
 {
+
     if keys_pressed[5] {
         println!("jumping!");
         jump(player,game_state);
@@ -81,6 +84,35 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
         game_state[player.pos.1 - 2][player.pos.0 - 1] = ' ';
         game_state[player.pos.1 - 2][player.pos.0 + 1] = ' ';
     }
+    else if player.animation == 2 {
+        //   
+        //  /|\
+        //  / \
+        game_state[player.pos.1][player.pos.0] = ' ';
+        game_state[player.pos.1][player.pos.0 - 1] = '/';
+        game_state[player.pos.1][player.pos.0 + 1] = '\\';
+        game_state[player.pos.1 - 1][player.pos.0] = '|';
+        game_state[player.pos.1 - 1][player.pos.0 - 1] = '/';
+        game_state[player.pos.1 - 1][player.pos.0 + 1] = '\\';
+        game_state[player.pos.1 - 2][player.pos.0] = ' ';
+        game_state[player.pos.1 - 2][player.pos.0 - 1] = ' ';
+        game_state[player.pos.1 - 2][player.pos.0 + 1] = ' ';
+    }
+    // if we're in the walking animation state
+    else if player.animation == 3 {
+        //   
+        //  /|\
+        //   |
+        game_state[player.pos.1][player.pos.0] = '|';
+        game_state[player.pos.1][player.pos.0 - 1] = ' ';
+        game_state[player.pos.1][player.pos.0 + 1] = ' ';
+        game_state[player.pos.1 - 1][player.pos.0] = '|';
+        game_state[player.pos.1 - 1][player.pos.0 - 1] = '/';
+        game_state[player.pos.1 - 1][player.pos.0 + 1] = '\\';
+        game_state[player.pos.1 - 2][player.pos.0] = ' ';
+        game_state[player.pos.1 - 2][player.pos.0 - 1] = ' ';
+        game_state[player.pos.1 - 2][player.pos.0 + 1] = ' ';
+    }
     else {
         println!("Error setting animation state!");
     }
@@ -89,10 +121,14 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
     keys_pressed[0] = false;
     keys_pressed[1] = false;
     //println!("Tick!")
+
+    if player.has_won {
+        game_state[WIN_LOCATION.1][WIN_LOCATION.0] = 'o';
+        println!("player won!");
+    }
 }
 
 const GRAV_PER_FRAME: i32 = 1;
-const GRAV_EVERY_BLANK_FRAMES: usize = 2;
 
 fn do_gravity(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1]) {
         // Apply gravity
@@ -146,6 +182,14 @@ fn do_gravity(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZ
 fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1]) {
     // Collision Code here.
     player.set_pos((player.pos.0 as i32 + player.accel.0) as usize, player.pos.1);
+    
+    // if the player is in the win location (where the head is in the "o" spot)
+    if player.pos.0 > WIN_LOCATION.0 && player.pos.1 == WIN_LOCATION.1 + 2{
+        player.win();
+    }
+    
+    
+    
     // Right
     if player.accel.0 > 0 {
         player.set_accel(player.accel.0 - 1, player.accel.1);
