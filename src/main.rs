@@ -30,7 +30,6 @@ pub struct Player {
 
 impl Player {
     fn set_pos(&mut self, x: usize, y: usize) {
-        // ^^^ Here
         self.pos = (x, y);
     }
 
@@ -79,6 +78,41 @@ impl Player {
 
     fn reset_grav_counter(&mut self){
         self.grav_counter = 0;
+    }
+
+    fn set_accel(&mut self, x: i32, y: i32) {
+        self.accel = (x, y);
+    }
+}
+
+pub struct Enemy {
+    pos: (usize, usize),
+    animation: usize,
+    frame_counter: usize,
+    accel: (i32, i32),
+}
+
+impl Enemy {
+    fn set_pos(&mut self, x: usize, y: usize) {
+        self.pos = (x, y);
+    }
+
+    // this function should toggle the animation state if enough frames have passed
+    fn animate(&mut self) {
+        // if the regular game is still going
+        if self.frame_counter >= ANIM_RATE {
+            if self.animation == 0 {
+                self.animation = 1;
+            }
+            else if self.animation == 1 {
+                self.animation = 0;
+            }
+            self.frame_counter = 0;
+        }
+    }
+
+    fn increment_frame_counter(&mut self){
+        self.frame_counter += 1;
     }
 
     fn set_accel(&mut self, x: i32, y: i32) {
