@@ -255,6 +255,16 @@ fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1
         let mut collided = false;
         let mut snapto = player.pos.0 as i32 + player.accel.0;
 
+        // World End Collision
+        if snapto - 2 < 0 {
+            snapto = 2;
+            player.accel.0 = 0
+        }
+        if snapto + 2 > WORLDSIZE.0 as i32 {
+            snapto = WORLDSIZE.0 as i32 - 2;
+            player.accel.0 = 0;
+        }
+
         // Vertical first
         for i in 0..=2 {
             // Then horizontal
@@ -272,7 +282,7 @@ fn do_walk(player: &mut Player, game_state: &mut [[char;WORLDSIZE.0];WORLDSIZE.1
                     }
                 }
             }
-            else {
+            else if player.accel.0 < 0{
                 for j in 2..=-(player.accel.0 - 1) {
                     match game_state[player.pos.1 - i][player.pos.0 - j as usize ] {
                         '#' | 'T' => {
