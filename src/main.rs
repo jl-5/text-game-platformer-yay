@@ -166,14 +166,14 @@ fn main() {
         };
 
         // Enemy instatiations
-        let mut enemy1: Enemy = Enemy {
+        let enemy1: Enemy = Enemy {
             pos: (263, 22),
             animation: 0,
             frame_counter: 0,
             dir: 0
         };
 
-        let mut enemy2: Enemy = Enemy {
+        let enemy2: Enemy = Enemy {
             pos: (303, 10),
             animation: 0,
             frame_counter: 0,
