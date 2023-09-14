@@ -13,7 +13,6 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
 {
 
     if keys_pressed[2] {
-        println!("jumping!");
         jump(player,game_state);
         keys_pressed[2] = false;
     }
@@ -156,6 +155,11 @@ pub fn simulate(world: &mut [[char;WORLDSIZE.0];WORLDSIZE.1], game_state: &mut [
                 // Check that the player is on the ground before letting them jump.
                 // if the enemy is facing left
                 if enemies[i].dir == 0 {
+                    if (enemies[i].pos.0 + 1 >= player.pos.0 - 1 && enemies[i].pos.0 - 1 <= player.pos.0 + 1) && (enemies[i].pos.1 - 2 >= player.pos.1 && enemies[i].pos.0 <= player.pos.0 - 2) {
+                        kill(player);
+                    }
+
+
                     // if there is no left space for it to walk on
                     if game_state[enemies[i].pos.1 + 1][enemies[i].pos.0 - 1] == ' ' {
                         enemies[i].flip_dir();
